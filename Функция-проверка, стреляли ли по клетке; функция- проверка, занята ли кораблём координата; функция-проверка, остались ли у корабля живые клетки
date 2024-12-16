@@ -1,0 +1,21 @@
+Function NotShooted(Const Coords : TCoordinates) : Boolean;
+Begin
+NotShooted := (StateOfBattleFieldUser1[Coords[0]][Coords[1]] = 0) And (StateOfBattleFieldUser2[Coords[0]][Coords[1]] = 0);
+End;
+
+Function IsShipInCell(Const Coords : TCoordinates, Const StateOfBattleFieldUser, StateShipsUser : TMatrix) : Boolean;
+Begin
+    IsShipInCell := StateOfBattleFieldUser[Coords[0]][Coords[1]] > 0;
+End;
+
+Function IsShipAlive(Const Coords : TCoordinates; Const StateShipsUser : TMatrix): Boolean;
+Var
+  J: Integer;
+Begin
+  IsShipAlive := False;
+  For J := 0 To High(StateShipsUser[High(StateShipsUser)]) Do
+  Begin
+    If StateShipsUser[High(StateShipsUser)][J] > -6 Then
+      IsShipAlive := True;
+  End;
+End;
