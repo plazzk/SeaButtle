@@ -1,0 +1,7 @@
+Procedure Shoot(Const Coords: TCoordinates; Var StateOfBattleFieldUser, StateShipsUser: TMatrix);
+Begin
+    If IsShipInCell(Coords, StateOfBattleFieldUser, StateShipsUser) Then
+        HurtShip(Coords, StateOfBattleFieldUser, StateShipsUser)
+    Else
+        StateOfBattleFieldUser[Coords[1], Coords[2]] := -5
+End;
