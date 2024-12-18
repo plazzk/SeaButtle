@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2024/12/07 23:50:42.000.580,=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/12/15 19:44:23.000.107,=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/12/15 19:54:31.000.217,C:\Mac\Home\Documents\Embarcadero\Studio\Projects\FormSeaBattle\Unit1.dfm=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2024/12/15 19:54:31.000.217,C:\Mac\Home\Documents\Embarcadero\Studio\Projects\FormSeaBattle\Unit1.pas=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/12/15 19:55:06.000.647,C:\Mac\Home\Documents\Embarcadero\Studio\Projects\FormSeaBattle\MainUnit.pas=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\FormSeaBattle\Unit1.pas</Transaction>
+    <Transaction>2024/12/15 19:55:06.000.647,C:\Mac\Home\Documents\Embarcadero\Studio\Projects\FormSeaBattle\MainUnit.dfm=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\FormSeaBattle\Unit1.dfm</Transaction>
+    <Transaction>2024/12/15 20:53:16.000.206,C:\Mac\Home\Documents\Embarcadero\Studio\Projects\FormSeaBattle\SeaBattle.dproj=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2024/12/15 21:37:55.000.300,=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\FormSeaBattle\Unit1.pas</Transaction>
+    <Transaction>2024/12/15 21:40:23.000.870,C:\Mac\Home\Documents\Embarcadero\Studio\Projects\FormSeaBattle\Unit1.dfm=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\FormSeaBattle\WinUnit.dfm</Transaction>
+    <Transaction>2024/12/15 21:40:23.000.870,C:\Mac\Home\Documents\Embarcadero\Studio\Projects\FormSeaBattle\Unit1.pas=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\FormSeaBattle\WinUnit.pas</Transaction>
+  </Transactions>
+</BorlandProject>
