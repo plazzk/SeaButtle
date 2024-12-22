@@ -1,0 +1,201 @@
+Procedure ReadBattleFieldFormFile(Const PathToFile: String; Var StateOfBattleFieldUser: TMatrix; Var StateShipsUser: TMatrix);
+Var
+    UserFile: TextFile;
+    I, J, CurrentSize: Integer;
+    Symbol: Char;
+    ShipSizes: Array Of Integer;
+    ShipIndex: Integer;
+    IsFieldGood: Boolean;
+    CountM, CountK: Integer;
+
+    Procedure InitializeMatrices;
+    Begin
+        SetLength(StateOfBattleFieldUser, 10, 10);
+        SetLength(StateShipsUser, 9, 10);
+        SetLength(ShipSizes, 10);
+        For Var I := 0 To 8 Do
+            For Var J := 0 To 9 Do
+                StateShipsUser[I, J] := -6;
+    End;
+
+    Procedure SortShipsBySize;
+    Var
+        I, J, Temp: Integer;
+        TempColumn: Array [0 .. 8] Of Integer;
+    Begin
+        For I := 0 To ShipIndex - 2 Do
+        Begin
+            For J := 0 To ShipIndex - 2 - I Do
+            Begin
+                If ShipSizes[J] < ShipSizes[J + 1] Then
+                Begin
+                    Temp := ShipSizes[J];
+                    ShipSizes[J] := ShipSizes[J + 1];
+                    ShipSizes[J + 1] := Temp;
+                    For Var K := 0 To 8 Do
+                    Begin
+                        TempColumn[K] := StateShipsUser[K, J];
+                        StateShipsUser[K, J] := StateShipsUser[K, J + 1];
+                        StateShipsUser[K, J + 1] := TempColumn[K];
+                    End;
+                End;
+            End;
+        End;
+    End;
+
+    Procedure MarkShip(X, Y: Integer; Var Size: Integer; ShipCol: Integer);
+    Begin
+        If ((X >= 0) And (X < 10) And (Y >= 0) And (Y < 10)) And (StateOfBattleFieldUser[X, Y] = 1) Then
+        Begin
+            StateShipsUser[Size * 2, ShipCol] := Y;
+            StateShipsUser[Size * 2 + 1, ShipCol] := X;
+            StateOfBattleFieldUser[X, Y] := -1;
+            Size := Size + 1;
+            MarkShip(X + 1, Y, Size, ShipCol);
+            MarkShip(X - 1, Y, Size, ShipCol);
+            MarkShip(X, Y + 1, Size, ShipCol);
+            MarkShip(X, Y - 1, Size, ShipCol);
+        End;
+    End;
+
+    Procedure SetLastRowValues;
+    Begin
+        StateShipsUser[8, 0] := 4;
+        StateShipsUser[8, 1] := 3;
+        StateShipsUser[8, 2] := 3;
+        StateShipsUser[8, 3] := 2;
+        StateShipsUser[8, 4] := 2;
+        StateShipsUser[8, 5] := 2;
+        StateShipsUser[8, 6] := 1;
+        StateShipsUser[8, 7] := 1;
+        StateShipsUser[8, 8] := 1;
+        StateShipsUser[8, 9] := 1;
+    End;
+
+    Procedure ValidateShipCounts;
+    Var
+        ShipCount: Array [1 .. 4] Of Integer;
+        I: Integer;
+    Begin
+        For I := 1 To 4 Do
+            ShipCount[I] := 0;
+
+        For I := 0 To ShipIndex - 1 Do
+        Begin
+            If (ShipSizes[I] >= 1) And (ShipSizes[I] <= 4) Then
+                ShipCount[ShipSizes[I]] := ShipCount[ShipSizes[I]] + 1
+            Else
+            Begin
+                IsFieldGood := False;
+            End;
+        End;
+        If (ShipCount[1] <> 4) Or (ShipCount[2] <> 3) Or (ShipCount[3] <> 2) Or (ShipCount[4] <> 1) Then
+        Begin
+            IsFieldGood := False;
+        End;
+    End;
+
+    Procedure CheckShipsNeighbours;
+    Type
+        TArray = Array [0 .. 7] Of Integer;
+    Const
+        DX: TArray = (-1, -1, -1, 0, 0, 1, 1, 1);
+        DY: TArray = (-1, -1, -1, 0, 0, 1, 1, 1);
+    Var
+        I, J, K: Integer;
+        X, Y: Integer;
+    Begin
+        For I := 0 To High(StateOfBattleFieldUser) Do
+        Begin
+            For J := 0 To High(StateOfBattleFieldUser[I]) Do
+            Begin
+                If StateOfBattleFieldUser[I, J] > 0 Then
+                Begin
+                    For K := 0 To 7 Do
+                    Begin
+                        X := I + DX[K];
+                        Y := J + DY[K];
+                        If (X >= 0) And (X < 10) And (Y >= 0) And (Y < 10) Then
+                        Begin
+                            If (StateOfBattleFieldUser[X, Y] > 0) And (StateOfBattleFieldUser[X, Y] <> StateOfBattleFieldUser[I, J]) Then
+                            Begin
+                                IsFieldGood := False;
+                            End;
+                        End;
+                    End;
+                End;
+            End;
+        End;
+    End;
+
+Begin
+    IsFieldGood := True;
+    CountM := 0;
+    CountK := 0;
+    Try
+        InitializeMatrices;
+        AssignFile(UserFile, PathToFile);
+        Reset(UserFile);
+        Try
+            For I := 0 To High(StateOfBattleFieldUser) Do
+            Begin
+                For J := 0 To High(StateOfBattleFieldUser[I]) Do
+                Begin
+                    Repeat
+                        Read(UserFile, Symbol);
+                    Until Not(Symbol = ' ');
+
+                    If (Symbol = 'M') Then
+                    Begin
+                        StateOfBattleFieldUser[I, J] := 0;
+                        CountM := CountM + 1
+                    End
+                    Else
+                        If (Symbol = 'K') Then
+                        Begin
+                            StateOfBattleFieldUser[I, J] := 1;
+                            CountK := CountK + 1;
+                        End
+                        Else
+                            IsFieldGood := FAlse;
+                End;
+                ReadLn(UserFile);
+            End;
+            If (CountM <> 80) OR (CountK <> 20) Then
+                IsFieldGood := False;
+            ShipIndex := 0;
+            For I := 0 To High(StateOfBattleFieldUser) Do
+            Begin
+                For J := 0 To High(StateOfBattleFieldUser[I]) Do
+                Begin
+                    If StateOfBattleFieldUser[I, J] = 1 Then
+                    Begin
+                        CurrentSize := 0;
+                        MarkShip(I, J, CurrentSize, ShipIndex);
+                        For Var XPos := 0 To High(StateOfBattleFieldUser) Do
+                        Begin
+                            For Var YPos := 0 To High(StateOfBattleFieldUser[XPos]) Do
+                            Begin
+                                If StateOfBattleFieldUser[XPos, YPos] = -1 Then
+                                    StateOfBattleFieldUser[XPos, YPos] := CurrentSize;
+                            End;
+                        End;
+                        ShipSizes[ShipIndex] := CurrentSize;
+                        ShipIndex := ShipIndex + 1;
+                    End;
+                End;
+            End;
+            SortShipsBySize;
+            SetLastRowValues;
+            ValidateShipCounts;
+            CheckShipsNeighbours;
+        Finally
+            CloseFile(UserFile);
+        End;
+    Except
+        IsFieldGood := False;
+    End;
+    If (Not IsFieldGood) Then
+        //ЗДЕСЬ ДОБАВЬТЕ ИНСТРУКЦИИ, ЕСЛИ ПОЛЕ НЕПРАВИЛЬНОЕ
+        Writeln('ААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААА');
+End;
