@@ -1,0 +1,57 @@
+Procedure TMainForm.PaintNearbuyCells(Const CurrentCoord: TCoordinates; Var StateOfBattleFieldUser: TMatrix);
+var StringGridUser: TStringGrid;
+begin
+    If IsFirstPlayer then
+        StringGridUser := StringGridUser2
+    else
+        StringGridUser := StringGridUser1;
+    StateOfBattleFieldUser[CurrentCoord[1], CurrentCoord[0]] := -6;
+
+    if (CurrentCoord[0] > 0) And (CurrentCoord[1] > 0) then
+    begin
+       StateOfBattleFieldUser[CurrentCoord[1]-1,CurrentCoord[0]-1]:=-5;
+       StringGridUser.Cells[CurrentCoord[0],CurrentCoord[1]]:='·';
+    end;
+
+    if (CurrentCoord[0] < 9) And (CurrentCoord[1] < 9) then
+    begin
+       StateOfBattleFieldUser[CurrentCoord[1]+1,CurrentCoord[0]+1]:=-5;
+       StringGridUser.Cells[CurrentCoord[0]+2,CurrentCoord[1]+2]:='·';
+    end;
+
+    if (CurrentCoord[0] < 9) And (CurrentCoord[1] > 0) then
+    begin
+       StateOfBattleFieldUser[CurrentCoord[1]-1,CurrentCoord[0]+1]:=-5;
+       StringGridUser.Cells[CurrentCoord[0]+2,CurrentCoord[1]]:='·';
+    end;
+
+    if (CurrentCoord[0] > 0) And (CurrentCoord[1] < 9) then
+    begin
+       StateOfBattleFieldUser[CurrentCoord[1]+1,CurrentCoord[0]-1]:=-5;
+       StringGridUser.Cells[CurrentCoord[0],CurrentCoord[1]+2]:='·';
+    end;
+
+    If (CurrentCoord[0] > 0) And (StateOfBattleFieldUser[CurrentCoord[1],CurrentCoord[0]-1] <> -6) then
+    begin
+       StateOfBattleFieldUser[CurrentCoord[1],CurrentCoord[0]-1]:=-5;
+       StringGridUser.Cells[CurrentCoord[0],CurrentCoord[1]+1]:='·';
+    end;
+
+    If (CurrentCoord[0] < 9) And (StateOfBattleFieldUser[CurrentCoord[1],CurrentCoord[0]+1] <> -6) then
+    begin
+       StateOfBattleFieldUser[CurrentCoord[1],CurrentCoord[0]+1]:=-5;
+       StringGridUser.Cells[CurrentCoord[0]+2,CurrentCoord[1]+1]:='·';
+    end;
+
+    If (CurrentCoord[1] > 0) And (StateOfBattleFieldUser[CurrentCoord[1]-1,CurrentCoord[0]] <> -6) then
+    begin
+       StateOfBattleFieldUser[CurrentCoord[1]-1,CurrentCoord[0]]:=-5;
+       StringGridUser.Cells[CurrentCoord[0]+1,CurrentCoord[1]]:='·';
+    end;
+
+    If (CurrentCoord[1] < 9) And (StateOfBattleFieldUser[CurrentCoord[1]+1,CurrentCoord[0]] <> -6) then
+    begin
+       StateOfBattleFieldUser[CurrentCoord[1]+1,CurrentCoord[0]]:=-5;
+       StringGridUser.Cells[CurrentCoord[0]+1,CurrentCoord[1]+2]:='·';
+    end;
+end;
